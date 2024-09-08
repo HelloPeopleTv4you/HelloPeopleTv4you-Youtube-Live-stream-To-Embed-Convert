@@ -20,86 +20,210 @@
 
     <!-- Theme Color for mobile browsers -->
     <title>Youtube Live stream To Embed-Convert</title>
-  <title>Youtube-Live-Stream-To-Embed-Convert</title>
-  <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Global reset for margin, padding, and box-sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            background: linear-gradient(120deg, #3498db, #8e44ad);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow: auto;
+            text-align: center;
+        }
+
+        /* Input container */
+        .input-container {
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
+            margin-bottom: 20px; /* Space below the input container */
+        }
+
+        input[type="text"], select, button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 5px;
+            outline: none;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        input[type="text"]:focus, select:focus, button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            cursor: pointer;
+            background: linear-gradient(120deg, #3498db, #8e44ad);
+            border: none;
+        }
+
+        /* Iframe Container */
+        .iframe-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            height: 60vh;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            display: none; /* Hide iframe initially */
+            margin-top: 20px; /* Space above the iframe container */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Fallback Background Image */
+        .bg-image {
+            display: none;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .iframe-container {
+                height: 50vh;
+            }
+
+            .input-container {
+                width: 90%;
+                max-width: none;
+                padding: 10px;
+                box-shadow: none;
+            }
+
+            input[type="text"], select, button {
+                max-width: 100%;
+            }
+        }
+      /* Instructions container */
+.instructions-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    max-width: 90%;
+    width: 600px;
+    text-align: left;
+    margin: 20px auto;
+    animation: fadeIn 1s ease-out;
+    color: #fff;
+}
+
+/* Instructions heading */
+.instructions-container h1 {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #f39c12;
+    border-bottom: 2px solid #f39c12;
+    padding-bottom: 10px;
+}
+
+/* Instructions list */
+.instructions-container ol {
+    margin-left: 20px;
+    line-height: 1.6;
+}
+
+.instructions-container li {
+    margin-bottom: 15px;
+}
+
+.instructions-container strong {
+    color: #f39c12;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .instructions-container {
+        width: 90%;
+        max-width: none;
+        padding: 10px;
+        box-shadow: none;
+    }
+}
+
+
+    </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>m3u8 to iframe Converter</h1>
-      <h4>Free Online Youtube Channel Livestream Player</h4>
-    </div>
-  </header>
 
-  <main>
-    <div class="container">
-      <img src="logo.png" alt="Logo" class="logo">
+    <!-- Input container for entering YouTube channel ID or username -->
+    <div class="input-container">
+        <label for="youtubeChannel">Enter YouTube Channel ID or Username:</label>
+        <input type="text" id="youtubeChannel" placeholder="Enter YouTube Channel ID or Username">
 
-      <div class="converter-container">
-        <label for="hlsLink">Enter HLS Link:</label>
-        <input type="text" id="hlsLink" name="hlsLink" placeholder="Your youtube channel id Or username">
+        <label for="playerSelect">Select Player:</label>
         <select id="playerSelect">
-          <option value="cleper">Cleper Player</option>
-          <option value="jw">JW Player</option>
-          <option value="videojs">Video.js Player</option>
+            <option value="channel_id_handle">Channel ID and Username with (@)handle</option>
+            <option value="channel_username">Channel Username without (@)handle</option>
         </select>
-        <button onclick="generatePreview()">Generate Preview</button>
-        <button onclick="loadSimpleHLS()">Load Sample HLS</button>
-      </div>
 
-      <div class="preview-container" id="previewContainer">
-        <p>Add Youtube Channel id & Channel username to start playing.</p>
-      </div>
-
-      <div class="embed-container">
-        <input type="text" id="embedLink" style="display: none;">
-        <button id="copyEmbedBtn" style="display: none;" onclick="copyEmbedLink()">Copy Embed Link</button>
-      </div>
+        <button onclick="generateEmbed()">Generate Embed</button>
     </div>
 
-    <section class="texthere">
-      <div class="container">
-        <h2>Player Features</h2>
-        <ul>
-          <li>Free to use</li>
-          <li>Supports multiple platforms: Android, Mac OS X, tvOS, Windows, Android TV</li>
-          <!-- Add more features as needed -->
-        </ul>
-      </div>
-    </section>
-    <section class="supported-platforms">
-      <div class="container">
-        <h2>Supported Platforms</h2>
-        <p>This tool supports the following platforms for embedding:</p>
-        <ul>
-          <li>Android</li>
-          <li>Mac OS X</li>
-          <li>tvOS</li>
-          <li>Windows</li>
-          <li>Android TV</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="how-to-use">
-      <div class="container">
-        <h2>How to Use</h2>
-        <p>Start by entering an HLS stream link into the input field labeled "Enter HLS Link". This can be a direct link to an .m3u8 playlist or other supported formats.</p>
-
-        <h3>Select Player</h3>
-        <p>Choose a player from the dropdown list (Cleper Player, JW Player, Video.js Player or any player). This selection determines how the HLS stream will be embedded.</p>
-
-        <h3>Generate Preview</h3>
-        <p>Click the "Generate Preview" button to create an iframe preview below. This iframe embeds the HLS stream using the selected player.</p>
-
-        <h3>Copy Embed Link</h3>
-        <p>Once the preview is generated, click the "Copy Embed Link" button to copy the embed code (iframe URL) to your clipboard. This link can then be used to embed the HLS stream into any HTML page or platform that supports iframes.</p>
-      </div>
-    </section>
-
+    <!-- Iframe container for the live stream -->
+    <div class="iframe-container">
+        <iframe id="dynamicIframe" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
+    </div>
     
+    <!-- Fallback background image if iframe fails to load -->
+    <div class="bg-image" id="fallbackImage" style="background-image: url('https://via.placeholder.com/1920x1080');"></div>
 
-    <section class="embed-methods">
+<!-- Instructions section -->
+<div class="instructions-container">
+    <h1>How It Works</h1>
+    <p>This tool allows you to embed a live YouTube stream on this page. Follow these steps:</p>
+    <ol>
+        <li><strong>Enter YouTube Channel ID or Username:</strong> Type the channel ID or username of the YouTube channel you want to embed.</li>
+        <li><strong>Select Player Type:</strong> Choose whether you are using a channel ID and handle or just the username.</li>
+        <li><strong>Generate Embed:</strong> Click the "Generate Embed" button to load the live stream in the iframe below.</li>
+        <li><strong>View Live Stream:</strong> The live stream will be displayed in the iframe. If the iframe fails to load, a fallback image will be shown.</li>
+    </ol>
+</div>
+<section class="embed-methods">
       <div class="container">
         <h2>Embedding Methods</h2>
         <p>If your website is secured with an SSL certificate, use the HTTPS protocol for the embeddable URL. Ensure your streaming URL also supports the HTTPS format:</p>
@@ -205,7 +329,53 @@ function copyCode() {
     });
 }
    </script>
-  <script>
-   </script>
+    <script>
+        // Function to generate the YouTube Live Embed
+        function generateEmbed() {
+            const youtubeChannel = document.getElementById('youtubeChannel').value;
+            const playerOption = document.getElementById('playerSelect').value;
+            const iframe = document.getElementById('dynamicIframe');
+            const iframeContainer = document.querySelector('.iframe-container');
+            const fallbackImage = document.getElementById('fallbackImage');
+
+            if (!youtubeChannel) {
+                alert("Please enter a valid YouTube Channel ID or Username.");
+                return;
+            }
+
+            let embedURL = '';
+
+            // Generate the appropriate YouTube embed URL based on the player selection
+            if (playerOption === 'channel_id_handle') {
+                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?id=${youtubeChannel}`;
+            } else if (playerOption === 'channel_username') {
+                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?u=${youtubeChannel}`;
+            }
+
+            // Set the iframe src to the generated URL and show the iframe container
+            iframe.src = embedURL;
+            iframeContainer.style.display = 'block';
+
+            // Show fallback image if iframe fails to load
+            iframe.onerror = function() {
+                fallbackImage.style.display = 'block';
+                iframe.style.display = 'none';
+            }
+        }
+    </script>
+
+    <!-- Security script to prevent developer tools -->
+    <script src="https://dunggramer.github.io/disable-devtool/disable-devtool.min.js" defer></script>
+    <script src="https://cdn.staticaly.com/gh/DungGramer/disable-devtool/cbf447f/disable-devtool.min.js" defer></script>
+    <script src="https://gitcdn.xyz/repo/DungGramer/disable-devtool/master/disable-devtool.min.js" defer></script>
+    <script
+        disable-devtool-auto
+        src='https://cdn.jsdelivr.net/npm/disable-devtool'
+        url='xxx'
+        disable-menu='true'
+        detectors='xxx'
+        clear-log='true'
+    ></script>
+
 </body>
 </html>

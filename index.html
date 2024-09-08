@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Embed a live YouTube stream with an interactive player.">
-    <meta name="keywords" content="YouTube, live stream, embed, player, video">
+    <meta name="keywords" content="YouTube, live stream, embed, player, video, HelloPeopleTv4you">
     <meta name="author" content="HelloPeopleTv4you">
 
     <!-- Open Graph Meta Tags -->
@@ -14,13 +14,12 @@
     <meta property="og:type" content="website">
 
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="Youtube Live stream To Embed-Convert">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="YouTube Live Stream Embed Player">
     <meta name="twitter:description" content="Watch live YouTube streams directly embedded on this page.">
 
-    <!-- Theme Color for mobile browsers -->
-    <title>Youtube Live stream To Embed-Convert</title>
-    
+    <title>YouTube Live Stream Embed Player - HelloPeopleTv4you</title>
+
     <style>
         /* Global reset for margin, padding, and box-sizing */
         * {
@@ -44,7 +43,6 @@
 
         /* Input container */
         .input-container {
-            position: relative;
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px 20px;
             border-radius: 10px;
@@ -55,7 +53,7 @@
             align-items: center;
             width: 90%;
             max-width: 500px;
-            margin-bottom: 20px; /* Space below the input container */
+            margin-bottom: 20px;
         }
 
         input[type="text"], select, button {
@@ -83,7 +81,6 @@
 
         /* Iframe Container */
         .iframe-container {
-            position: relative;
             width: 90%;
             max-width: 1000px;
             height: 60vh;
@@ -91,8 +88,8 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            display: none; /* Hide iframe initially */
-            margin-top: 20px; /* Space above the iframe container */
+            display: none;
+            margin-top: 20px;
         }
 
         iframe {
@@ -101,12 +98,50 @@
             border: none;
         }
 
-        /* Fallback Background Image */
-        .bg-image {
-            display: none;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        /* Instructions container */
+        .instructions-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            max-width: 90%;
+            width: 600px;
+            text-align: left;
+            margin: 20px auto;
+            animation: fadeIn 1s ease-out;
+            color: #fff;
+        }
+
+        .instructions-container h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #f39c12;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+
+        .instructions-container ol {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions-container li {
+            margin-bottom: 15px;
+        }
+
+        .instructions-container strong {
+            color: #f39c12;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive Design */
@@ -126,122 +161,33 @@
                 max-width: 100%;
             }
         }
-      /* Instructions container */
-.instructions-container {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
-    max-width: 90%;
-    width: 600px;
-    text-align: left;
-    margin: 20px auto;
-    animation: fadeIn 1s ease-out;
-    color: #fff;
-}
 
-/* Instructions heading */
-.instructions-container h1 {
-    font-size: 26px;
-    margin-bottom: 15px;
-    color: #f39c12;
-    border-bottom: 2px solid #f39c12;
-    padding-bottom: 10px;
-}
+        .code-snippet {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
 
-/* Instructions list */
-.instructions-container ol {
-    margin-left: 20px;
-    line-height: 1.6;
-}
+        .code-snippet pre {
+            white-space: pre-wrap;
+            color: #fff;
+        }
 
-.instructions-container li {
-    margin-bottom: 15px;
-}
+        .copy-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
 
-.instructions-container strong {
-    color: #f39c12;
-}
+        .copy-button:hover {
+            background-color: #2980b9;
+        }
 
-/* Fade In Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .instructions-container {
-        width: 90%;
-        max-width: none;
-        padding: 10px;
-        box-shadow: none;
-    }
-}
-
-
-    </style>
-</head>
-<body>
-
-    <!-- Input container for entering YouTube channel ID or username -->
-    <div class="input-container">
-        <label for="youtubeChannel">Enter YouTube Channel ID or Username:</label>
-        <input type="text" id="youtubeChannel" placeholder="Enter YouTube Channel ID or Username">
-
-        <label for="playerSelect">Select Player:</label>
-        <select id="playerSelect">
-            <option value="channel_id_handle">Channel ID and Username with (@)handle</option>
-            <option value="channel_username">Channel Username without (@)handle</option>
-        </select>
-
-        <button onclick="generateEmbed()">Generate Embed</button>
-    </div>
-
-    <!-- Iframe container for the live stream -->
-    <div class="iframe-container">
-        <iframe id="dynamicIframe" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
-    </div>
-    
-    <!-- Fallback background image if iframe fails to load -->
-    <div class="bg-image" id="fallbackImage" style="background-image: url('https://via.placeholder.com/1920x1080');"></div>
-
-<!-- Instructions section -->
-<div class="instructions-container">
-    <h1>How It Works</h1>
-    <p>This tool allows you to embed a live YouTube stream on this page. Follow these steps:</p>
-    <ol>
-        <li><strong>Enter YouTube Channel ID or Username:</strong> Type the channel ID or username of the YouTube channel you want to embed.</li>
-        <li><strong>Select Player Type:</strong> Choose whether you are using a channel ID and handle or just the username.</li>
-        <li><strong>Generate Embed:</strong> Click the "Generate Embed" button to load the live stream in the iframe below.</li>
-        <li><strong>View Live Stream:</strong> The live stream will be displayed in the iframe. If the iframe fails to load, a fallback image will be shown.</li>
-    </ol>
-</div>
-<h4>Example of Embed Iframe:</h4>
-        <div class="code-snippet">
-    <pre><code>&lt;iframe 
-        frameborder="0" 
-        height="100%" 
-        width="450px" 
-        allowfullscreen="" 
-        scrolling="no" 
-        allow="autoplay;fullscreen" 
-        src="https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=example youtube channel id /@username"&gt;
-    &lt;/iframe&gt;
-    </code></pre>
-    <button class="copy-button" onclick="copyCode()">Copy</button>
-</div>
-      </div>
-    </section>
-  </main>
-<style>
-       
+        /* Keywords Container */
         .container111 {
             max-width: 500px;
             width: 100%;
@@ -273,99 +219,94 @@
     </style>
 </head>
 <body>
-    <div class="container111" data-keywords="keyword1,keyword2,keyword3">
-        <div id="keywords-container"></div>
+
+    <!-- Input container for entering YouTube channel ID or username -->
+    <div class="input-container">
+        <label for="youtubeChannel">Enter YouTube Channel ID or Username:</label>
+        <input type="text" id="youtubeChannel" placeholder="Enter YouTube Channel ID or Username">
+
+        <label for="playerSelect">Select Player:</label>
+        <select id="playerSelect">
+            <option value="channel_id_handle">Channel ID and Username with (@)handle</option>
+            <option value="channel_username">Channel Username without (@)handle</option>
+        </select>
+
+        <button onclick="generateEmbed()">Generate Embed</button>
     </div>
 
-   <script>
-    function renderKeywords() {
-        const container = document.getElementById('keywords-container');
-        const dataContainer = document.querySelector('.container111');
-        const keywords = dataContainer.getAttribute('data-keywords').split(',');
-
-        container.innerHTML = ''; // Clear existing keywords
-
-        keywords.forEach(keyword => {
-            const keywordTag = document.createElement('div');
-            keywordTag.className = 'keyword-tag';
-            keywordTag.textContent = keyword;
-
-            // Add click event listener
-            keywordTag.addEventListener('click', () => {
-                alert(`You clicked on: ${keyword}`);
-                // Here you can add other actions to perform when a keyword is clicked
-            });
-
-            container.appendChild(keywordTag);
-        });
-    }
-
-    renderKeywords(); // Initial rendering of keywords
-</script>
-  <div class="container1">
-    <div class="container">
-      <p>&copy; 2024 m3u8 to iframe Converter. All rights reserved.</p>
-      <p>Author: HelloPeopleTv4you - Distributed By: <a href="#" target="_blank" title="HelloPeopleTv4you"></a></p>
+    <!-- Iframe container for the live stream -->
+    <div class="iframe-container">
+        <iframe id="dynamicIframe" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
     </div>
-  </div>
-    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-  <script>
-function copyCode() {
-    const codeSnippet = document.querySelector('pre code').textContent;
-    navigator.clipboard.writeText(codeSnippet).then(() => {
-        alert('Code copied to clipboard!');
-    }, (err) => {
-        console.error('Failed to copy code: ', err);
-    });
-}
-   </script>
+
+    <!-- Instructions section -->
+    <div class="instructions-container">
+        <h1>How It Works</h1>
+        <p>This tool allows you to embed a live YouTube stream on this page. Follow these steps:</p>
+        <ol>
+            <li><strong>Enter YouTube Channel ID or Username:</strong> Type the channel ID or username of the YouTube channel you want to embed.</li>
+            <li><strong>Select Player Type:</strong> Choose whether you are using a channel ID and handle or just the username.</li>
+            <li><strong>Generate Embed:</strong> Click the "Generate Embed" button to load the live stream in the iframe below.</li>
+            <li><strong>View Live Stream:</strong> The live stream will be displayed in the iframe. If the iframe fails to load, a fallback image will be shown.</li>
+        </ol>
+    </div>
+
+    <h4>Example of Embed Iframe:</h4>
+    <div class="code-snippet">
+        <pre><code>&lt;iframe 
+            frameborder="0" 
+            height="100%" 
+            width="450px" 
+            allowfullscreen="" 
+            scrolling="no" 
+            allow="autoplay;fullscreen" 
+            src="https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=example-youtube-channel-id/@username"&gt;
+        &lt;/iframe&gt;
+        </code></pre>
+        <button class="copy-button" onclick="copyCode()">Copy</button>
+    </div>
+
+    <!-- Keywords container -->
+    <div class="container111">
+        <h2>Keywords</h2>
+        <div id="keywords-container">
+            <span class="keyword-tag">YouTube</span>
+            <span class="keyword-tag">live stream</span>
+            <span class="keyword-tag">embed</span>
+            <span class="keyword-tag">HelloPeopleTv4you</span>
+        </div>
+    </div>
+
     <script>
-        // Function to generate the YouTube Live Embed
+        // Function to generate YouTube embed URL based on user input
         function generateEmbed() {
-            const youtubeChannel = document.getElementById('youtubeChannel').value;
-            const playerOption = document.getElementById('playerSelect').value;
-            const iframe = document.getElementById('dynamicIframe');
-            const iframeContainer = document.querySelector('.iframe-container');
-            const fallbackImage = document.getElementById('fallbackImage');
+            const youtubeChannel = document.getElementById("youtubeChannel").value.trim();
+            const playerType = document.getElementById("playerSelect").value;
+            const iframeContainer = document.querySelector(".iframe-container");
+            const dynamicIframe = document.getElementById("dynamicIframe");
 
-            if (!youtubeChannel) {
+            let embedUrl = "";
+
+            if (youtubeChannel) {
+                if (playerType === "channel_id_handle") {
+                    embedUrl = `https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=${youtubeChannel}`;
+                } else if (playerType === "channel_username") {
+                    embedUrl = `https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=${youtubeChannel}`;
+                }
+                dynamicIframe.src = embedUrl;
+                iframeContainer.style.display = "block";
+            } else {
                 alert("Please enter a valid YouTube Channel ID or Username.");
-                return;
-            }
-
-            let embedURL = '';
-
-            // Generate the appropriate YouTube embed URL based on the player selection
-            if (playerOption === 'channel_id_handle') {
-                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?id=${youtubeChannel}`;
-            } else if (playerOption === 'channel_username') {
-                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?u=${youtubeChannel}`;
-            }
-
-            // Set the iframe src to the generated URL and show the iframe container
-            iframe.src = embedURL;
-            iframeContainer.style.display = 'block';
-
-            // Show fallback image if iframe fails to load
-            iframe.onerror = function() {
-                fallbackImage.style.display = 'block';
-                iframe.style.display = 'none';
             }
         }
+
+        // Function to copy the code to clipboard
+        function copyCode() {
+            const codeSnippet = document.querySelector(".code-snippet pre").innerText;
+            navigator.clipboard.writeText(codeSnippet).then(() => {
+                alert("Code copied to clipboard!");
+            });
+        }
     </script>
-
-    <!-- Security script to prevent developer tools -->
-    <script src="https://dunggramer.github.io/disable-devtool/disable-devtool.min.js" defer></script>
-    <script src="https://cdn.staticaly.com/gh/DungGramer/disable-devtool/cbf447f/disable-devtool.min.js" defer></script>
-    <script src="https://gitcdn.xyz/repo/DungGramer/disable-devtool/master/disable-devtool.min.js" defer></script>
-    <script
-        disable-devtool-auto
-        src='https://cdn.jsdelivr.net/npm/disable-devtool'
-        url='xxx'
-        disable-menu='true'
-        detectors='xxx'
-        clear-log='true'
-    ></script>
-
 </body>
 </html>

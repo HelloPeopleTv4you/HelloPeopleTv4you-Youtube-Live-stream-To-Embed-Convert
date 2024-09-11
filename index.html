@@ -295,13 +295,13 @@
 
     <!-- Input container for entering YouTube channel ID or username -->
     <div class="input-container">
-        <label for="youtubeChannel">Enter YouTube Channel ID or Username:</label>
+        <label for="youtubeChannel">Enter YouTube Channel ID or Username with (@)handle:</label>
         <input type="text" id="youtubeChannel" placeholder="Enter YouTube Channel ID or Username">
 
         <label for="playerSelect">Select Player:</label>
         <select id="playerSelect">
-            <option value="channel_id_handle">Channel ID and Username with (@)handle</option>
-            <option value="channel_username">Channel Username without (@)handle</option>
+            <option value="channel_username">Channel ID Or Username Or Username with (@)handle</option>
+		<option value="channel_id_handle">Channel ID and Username with (@)handle</option>
         </select>
 
         <button onclick="generateEmbed()">Generate Embed</button>

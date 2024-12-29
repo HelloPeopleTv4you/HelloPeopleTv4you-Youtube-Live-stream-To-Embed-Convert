@@ -67,32 +67,7 @@ Before running the tool, ensure that the following are installed on your machine
 
 To get started with the **YouTube Live Stream Embed Converter**, follow the steps below:
 
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/youtube-live-stream-embed-converter
-    ```
-
-2. **Navigate into the project directory:**
-    ```bash
-    cd youtube-live-stream-embed-converter
-    ```
-
-3. **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
-4. **Run the project:**
-    ```bash
-    npm start
-    ```
-
-5. **Open the app in your browser:**
-    ```
-    http://localhost:3000
-    ```
-
-6. **How to use:**
+. **How to use:**
     - Enter the YouTube **Channel ID** or **Username**.
     - Configure additional options (Autoplay, Disable Interactions).
     - Click "Generate" to get the embed code.
